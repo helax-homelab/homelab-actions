@@ -1,0 +1,23 @@
+name: Setup Devenv
+description: Setup the devenv environment for the repository
+
+inputs:
+  authToken:
+    description: Cachix authentication token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31
+
+    - name: Configure devenv cache
+      uses: cachix/cachix-action@v17
+      with:
+        name: helax-homelab
+        authToken: ${{ inputs.authToken }}
+
+    - name: Install devenv
+      shell: bash
+      run: nix profile add nixpkgs#devenv
